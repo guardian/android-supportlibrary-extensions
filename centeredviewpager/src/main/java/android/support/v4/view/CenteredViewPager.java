@@ -1165,9 +1165,27 @@ public class CenteredViewPager extends ViewGroup {
 
         // Base all offsets off of curItem.
         final int itemCount = mItems.size();
+
+        boolean coldStart = true;
+        for(int i=0; i<mItems.size(); i++) {
+            if(mItems.get(i).offset != 0) {
+                coldStart = false;
+                break;
+            }
+        }
+        if(coldStart) {
+            if (curItem.position == N - 1) {
+                curItem.offset = (curItem.position - curItem.widthFactor - ((28 * getResources().getDisplayMetrics().density / 2) / getClientWidth()));
+            } else if (curItem.position == 0) {
+                curItem.offset = 0;
+            } else {
+                curItem.offset = curItem.position * mAdapter.getPageWidth(curItem.position);
+            }
+        }
+
         float offset = curItem.offset;
         int pos = curItem.position - 1;
-        mFirstOffset = curItem.position == 0 ? curItem.offset : -Float.MAX_VALUE;
+        mFirstOffset = curItem.position == 0 ? curItem.offset : 0;
         mLastOffset = curItem.position == N - 1 ?
                 curItem.offset + curItem.widthFactor - 1 : Float.MAX_VALUE;
         // Previous pages
