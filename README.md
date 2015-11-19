@@ -11,7 +11,8 @@ getPageWidth(...)
 ```
 method in your Adapter for the best effect.
 # How to build this?
-Open the root directory in Android Studio. On the right hand side of the window hit the "Gradle" tab, and under the ```
+Open the root directory in Android Studio. On the right hand side of the window hit the "Gradle" tab, and under the 
+```
 :library
 ```
 job click 'build'. An .aar will be built into the build directory.
