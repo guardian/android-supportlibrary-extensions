@@ -1,3 +1,8 @@
+Android Support Library Extensions
+=======
+
+This is a collection of helper Views and ViewGroup's used by the Guardian's Android application.
+
 CenteredViewPager
 =======
 

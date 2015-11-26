@@ -1180,7 +1180,7 @@ public class CenteredViewPager extends ViewGroup {
         if (coldStart) {
             // Problem on this line?
             if (curItem.position == N - 1) {
-                curItem.offset = (curItem.position - curItem.widthFactor - ((28 * getResources().getDisplayMetrics().density / 2) / getClientWidth()));
+                curItem.offset = (curItem.position - curItem.widthFactor - ((getFlexibleMargin() / 2) / getClientWidth()));
             } else if (curItem.position == 0) {
                 curItem.offset = 0;
             } else {
@@ -1219,6 +1219,10 @@ public class CenteredViewPager extends ViewGroup {
         }
 
         mNeedCalculatePageOffsets = false;
+    }
+
+    private float getFlexibleMargin() {
+        return 28 * getResources().getDisplayMetrics().density;
     }
 
     /**
@@ -2082,8 +2086,8 @@ public class CenteredViewPager extends ViewGroup {
         float scrollX = oldScrollX + deltaX;
         final int width = getClientWidth();
 
-        float leftBound = -(28 * getResources().getDisplayMetrics().density);
-        float rightBound = width * mLastOffset + (28 * getResources().getDisplayMetrics().density);
+        float leftBound = -getFlexibleMargin();
+        float rightBound = Math.max(width * mLastOffset, getFlexibleMargin()) + getFlexibleMargin();
         boolean leftAbsolute = true;
         boolean rightAbsolute = true;
 
