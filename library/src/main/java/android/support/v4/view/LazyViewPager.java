@@ -10,7 +10,7 @@ import android.util.AttributeSet;
  * This pager waits until setCurrentItem is called before populating the Pager, so should hopefully be
  * less wasteful.
  */
-public class LazyViewPager extends ViewPager {
+public class LazyViewPager extends LockableViewPager {
     boolean currentItemSet = false;
     boolean setAdapterFlag = false;
 
