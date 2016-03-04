@@ -22,8 +22,10 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
+
 
 class SlidingTabStrip extends LinearLayout {
 
@@ -43,6 +45,7 @@ class SlidingTabStrip extends LinearLayout {
 
     private SlidingTabLayout.TabColorizer mCustomTabColorizer;
     private final SimpleTabColorizer mDefaultTabColorizer;
+    private int indicatorGravity;
 
     SlidingTabStrip(Context context) {
         this(context, null);
@@ -70,10 +73,18 @@ class SlidingTabStrip extends LinearLayout {
 
         mSelectedIndicatorThickness = (int) (SELECTED_INDICATOR_THICKNESS_DIPS * density);
         mSelectedIndicatorPaint = new Paint();
+        indicatorGravity = Gravity.BOTTOM;
     }
 
     void setCustomTabColorizer(SlidingTabLayout.TabColorizer customTabColorizer) {
         mCustomTabColorizer = customTabColorizer;
+        invalidate();
+    }
+
+    void setDividerResource(int dividerResource) {
+        setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
+        setDividerDrawable(getResources().getDrawable(dividerResource));
+        setDividerPadding(20);
         invalidate();
     }
 
@@ -121,12 +132,21 @@ class SlidingTabStrip extends LinearLayout {
 
             mSelectedIndicatorPaint.setColor(color);
 
-            canvas.drawRect(left, height - mSelectedIndicatorThickness, right,
-                    height, mSelectedIndicatorPaint);
+            if(indicatorGravity == Gravity.TOP) {
+                canvas.drawRect(left, 0, right, mSelectedIndicatorThickness, mSelectedIndicatorPaint);
+            }
+            else {
+                canvas.drawRect(left, height - mSelectedIndicatorThickness, right,
+                        height, mSelectedIndicatorPaint);
+            }
         }
 
         // Thin underline along the entire bottom edge
         canvas.drawRect(0, height - mBottomBorderThickness, getWidth(), height, mBottomBorderPaint);
+    }
+
+    void setIndicatorGravity(int gravity) {
+        this.indicatorGravity = gravity;
     }
 
     /**
