@@ -34,7 +34,7 @@ import android.widget.TextView;
  * <p>
  * To use the component, simply add it to your view hierarchy. Then in your
  * {@link android.app.Activity} or {@link android.support.v4.app.Fragment} call
- * {@link #setViewPager(ViewPager)} providing it the ViewPager this layout is being used for.
+ * {@link #setViewPager(ViewPager, SlidingTabViewCreator)} providing it the ViewPager this layout is being used for.
  * <p>
  * The colors can be customized in two ways. The first and simplest is to provide an array of colors
  * via {@link #setSelectedIndicatorColors(int...)}. The
@@ -45,6 +45,8 @@ import android.widget.TextView;
  * providing the layout ID of your custom layout.
  */
 public class SlidingTabLayout extends HorizontalScrollView {
+    private boolean mMakeNonSelectedSemiTransparent;
+
     /**
      * Allows complete control over the colors drawn in the tab layout. Set with
      * {@link #setCustomTabColorizer(TabColorizer)}.
@@ -109,6 +111,14 @@ public class SlidingTabLayout extends HorizontalScrollView {
 
     public void setDistributeEvenly(boolean distributeEvenly) {
         mDistributeEvenly = distributeEvenly;
+    }
+
+    public void setIndicatorGravity(int gravity) {
+        mTabStrip.setIndicatorGravity(gravity);
+    }
+
+    public void setDividerResource(int dividerResId) {
+        mTabStrip.setDividerResource(dividerResId);
     }
 
     /**
@@ -299,12 +309,18 @@ public class SlidingTabLayout extends HorizontalScrollView {
             }
             for (int i = 0; i < mTabStrip.getChildCount(); i++) {
                 mTabStrip.getChildAt(i).setSelected(position == i);
+                if(mMakeNonSelectedSemiTransparent) {
+                    mTabStrip.getChildAt(i).setAlpha(i != position ? 0.5f : 1.0f);
+                }
             }
             if (mViewPagerPageChangeListener != null) {
                 mViewPagerPageChangeListener.onPageSelected(position);
             }
         }
+    }
 
+    public void setTransparencyOnNonSelectedTabs(boolean value) {
+        mMakeNonSelectedSemiTransparent = value;
     }
 
     private class TabClickListener implements View.OnClickListener {
