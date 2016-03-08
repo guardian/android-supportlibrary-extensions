@@ -170,14 +170,8 @@ public class SlidingTabLayout extends HorizontalScrollView {
      * Create a default view to be used for tabs. This is called if a custom tab view is not set via
      * {@link #setCustomTabView(int, int)}.
      */
-    protected TextView createDefaultTabView(Context context) {
-        TextView textView = null;
-        if(mSlidingTabViewCreator != null) {
-            textView = mSlidingTabViewCreator.createView(context);
-        }
-        if(textView == null) {
-            textView = new TextView(context);
-        }
+    protected TextView createDefaultTabView(Context context, int index) {
+        TextView textView = new TextView(context);
         textView.setGravity(Gravity.CENTER);
         textView.setLayoutParams(new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -208,8 +202,20 @@ public class SlidingTabLayout extends HorizontalScrollView {
                 tabTitleView = (TextView) tabView.findViewById(mTabViewTextViewId);
             }
 
+            if(mSlidingTabViewCreator != null) {
+                tabView = mSlidingTabViewCreator.createView(getContext(), i);
+                tabTitleView = (TextView) tabView.findViewById(android.R.id.text1);
+
+                if(tabTitleView == null) {
+                    throw new IllegalStateException("View returned from createView must have a TextView with the id android.R.id.text1");
+                }
+
+                tabView.setLayoutParams(new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            }
+
             if (tabView == null) {
-                tabView = createDefaultTabView(getContext());
+                tabView = createDefaultTabView(getContext(), i);
             }
 
             if (tabTitleView == null && TextView.class.isInstance(tabView)) {
@@ -336,7 +342,14 @@ public class SlidingTabLayout extends HorizontalScrollView {
     }
 
     public interface SlidingTabViewCreator {
-        TextView createView(Context context);
+        /**
+         * Create a custom view to use as the tab indicator.
+         * The TextView contained in this layout must have the id android.R.id.text1
+         * @param context
+         * @param tabIndex
+         * @return
+         */
+        View createView(Context context, int tabIndex);
     }
 
 }
