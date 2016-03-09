@@ -102,7 +102,8 @@ class SlidingTabStrip extends LinearLayout {
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
+    protected void dispatchDraw(Canvas canvas) {
+        super.dispatchDraw(canvas);
         final int height = getHeight();
         final int childCount = getChildCount();
         final SlidingTabLayout.TabColorizer tabColorizer = mCustomTabColorizer != null

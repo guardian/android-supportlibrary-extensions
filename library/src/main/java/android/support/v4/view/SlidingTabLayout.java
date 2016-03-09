@@ -240,6 +240,12 @@ public class SlidingTabLayout extends HorizontalScrollView {
                 tabView.setSelected(true);
             }
         }
+
+        if(mSlidingTabViewCreator != null) {
+            for(int i = 0; i<mTabStrip.getChildCount(); i++) {
+                mSlidingTabViewCreator.onPageSelected(mTabStrip.getChildAt(i), i, 0);
+            }
+        }
     }
 
     public void setContentDescription(int i, String desc) {
@@ -322,6 +328,12 @@ public class SlidingTabLayout extends HorizontalScrollView {
             if (mViewPagerPageChangeListener != null) {
                 mViewPagerPageChangeListener.onPageSelected(position);
             }
+
+            if(mSlidingTabViewCreator != null) {
+                for(int i = 0; i<mTabStrip.getChildCount(); i++) {
+                    mSlidingTabViewCreator.onPageSelected(mTabStrip.getChildAt(i), i, position);
+                }
+            }
         }
     }
 
@@ -350,6 +362,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
          * @return
          */
         View createView(Context context, int tabIndex);
+        void onPageSelected(View tab, int index, int currentlySelected);
     }
 
 }
